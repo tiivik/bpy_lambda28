@@ -1,5 +1,3 @@
-# Docker file for building Blender as a Python module for AWS Lambda
-# Compiles to ~/blender-git/blender_build/bin
 FROM amazonlinux:2017.03
 RUN yum install git cmake -y
 RUN yum groupinstall 'Development Tools' -y
@@ -38,17 +36,6 @@ RUN mkdir ~/blender-git && \
 RUN yum remove cmake -y
 RUN yum install git cmake3 -y
 RUN ln -s /usr/bin/cmake3 /usr/local/bin/cmake
-#RUN alias cmake='/usr/bin/cmake3'
-#RUN ls /usr/bin/
-#RUN cmake3 --version
-#RUN alias cmake=cmake3
-#RUN echo "alias cmake='cmake3'" >> ~/.bash_aliases && source ~/.bash_aliases
-#RUN echo 'alias hi="echo hello"' >> ~/.bashrc
-#RUN ln -s $(which cmake) /usr/bin/cmake3
-#-RUN cp /usr/bin/cmake3 /usr/local/bin/cmake
-#RUN PATH="$PATH:/usr/bin/"
-#RUN alias cmake='/usr/bin/cmake3' && cmake --version
-RUN cmake --version
 RUN ~/blender-git/blender/build_files/build_environment/install_deps.sh \
     --no-sudo \
     --no-confirm \
@@ -67,13 +54,6 @@ RUN ~/blender-git/blender/build_files/build_environment/install_deps.sh \
     --skip-ffmpeg
 
 ENV BOOST_ROOT ~/src/blender-deps/boost-1.60.0
-
-# Maintainer's note: calculate DPYTHON_INCLUDE_DIR with the following command:
-# ```
-# python3 -c "from distutils.sysconfig import get_python_inc; print(get_python_inc())"
-# ```
-
-# RUN ln -s /usr/bin/python /usr/bin/python3.7
 
 RUN mkdir ~/blender-git/blender_build && \
     cd ~/blender-git/blender_build && \
@@ -116,13 +96,8 @@ RUN cd ~/blender-git/blender_build && \
     make && \
     make install
 
-RUN ls ~/blender-git/blender_build/bin
-
-RUN ls /opt/lib
-RUN ls /opt/lib/
-
-RUN mkdir /bpy_lambda && \
-    cd /bpy_lambda && \
+RUN mkdir /build && \
+    cd /build && \
     cp -R ~/blender-git/blender_build/bin/2.80 . && \
     cp -R ~/blender-git/blender_build/bin/bpy.so . && \
 #    cp -L /opt/lib/openexr-2.2.0/lib/libHalf.so.12 . && \
@@ -139,4 +114,4 @@ RUN mkdir /bpy_lambda && \
     cp -L /usr/local/lib/libpython3.7m.so.1.0 . && \
     cp -L /usr/lib64/libGLU.so.1 .
 
-# Build artifact stored in /bpy_lambda
+# Build artifact stored in /bpy_lambda28
