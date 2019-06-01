@@ -1,6 +1,9 @@
 # Blender 2.8 Lambda Package
 This project compiles Blender 2.8 under Amazonlinux environment and creates a Lambda Layer (.zip) for executing Blender 2.8 on AWS Lambda.
 
+Inspired by pre-2.8 bpy_lambda project:
+ https://github.com/bcongdon/bpy_lambda
+
 ## Build container
 `./build.sh`
 
